@@ -1,0 +1,47 @@
+
+<div class="row justify-content-center top-margin">
+    <div class="col-12 col-md-10 col-lg-8">
+        <form class="card card-sm">
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col-auto">
+                    <i class="fas fa-search h4 text-body"></i>
+                </div>
+                <!--end of col-->
+                <div class="col">
+                    <input name="searchProduct" [(ngModel)]="searchProduct"
+                    class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search by product">
+                </div>
+                <!--end of col-->
+                
+                <!--end of col-->
+            </div>
+        </form>
+    </div>
+    <!--end of col-->
+</div>
+
+
+<div class="container">
+
+    <br>  <p class="text-center">Our Products</p>
+    
+
+
+<br>
+
+    <div class="row">  
+    <div class="col-md-4" *ngFor="let product of productApi.AllProducts | filter:searchProduct">
+        <figure class="card card-product">
+            <div class="img-wrap"><img [src]="product.ImagePath"></div>
+            <figcaption class="info-wrap">
+                    <h4 class="title">{{product.ProductName}}</h4>
+            </figcaption>
+            <div class="bottom-wrap">
+                <a class="btn btn-primary btn-sm float-right" style="color: white;" (click)="addProductToCart(product)">Add to Cart</a>	
+                <div class="price-wrap h5">
+                    <span class="price-new">${{product.Price}}</span>
+                </div> <!-- price-wrap.// -->
+            </div> <!-- bottom-wrap.// -->
+        </figure>
+    </div> <!-- col // -->
+   
