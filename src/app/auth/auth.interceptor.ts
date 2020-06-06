@@ -3,11 +3,13 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 
 export class AuthInterceptor implements HttpInterceptor{
-    constructor(private router: Router){}
+    constructor(private router: Router ,
+                private toastr: ToastrService){}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (req.headers.get('No-Auth') === 'true') {

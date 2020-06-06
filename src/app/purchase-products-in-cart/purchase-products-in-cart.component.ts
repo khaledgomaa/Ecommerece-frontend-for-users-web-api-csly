@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CartManager } from '../shared/services/numOfCartItems.service';
+import { CartManager } from '../shared/services/cartManager.service';
 import { ProductModel } from '../shared/interfaces/product.interface';
+import { PurchaseProducts } from '../shared/services/puchase.service';
+import { PurchaseProduct, ProductItem } from '../shared/interfaces/purchaseProduct.interface';
 
 @Component({
   selector: 'app-purchase-products-in-cart',
@@ -9,43 +11,60 @@ import { ProductModel } from '../shared/interfaces/product.interface';
 })
 export class PurchaseProductsInCartComponent implements OnInit {
 
-  constructor(private manageCart: CartManager) { }
+  constructor(public manageCart: CartManager ,
+              public purchaseCart: PurchaseProducts) { }
 
-  productsInCart: ProductModel[] = [];
+  purchaseModel: PurchaseProduct;
 
   countOfProduct = 1;
 
   totalPrice: number;
 
+  // update quantity of existing products in the cart
   addToCart(product: ProductModel , event){
-    if(this.productsInCart.includes(product)){
+    if(this.manageCart.productsInCart.includes(product)){
         {this.manageCart.productsInCart
           .find(p => p.ProductName === product.ProductName).Quantity = event.target.value; }
     }
-    console.log(this.manageCart.productsInCart);
   }
 
+  // get Total price of all products in the cart
   getTotalPrice(){
     let totalPrice = 0;
-    // tslint:disable-next-line: prefer-for-of
-    for(let i = 0 ; i < this.manageCart.productsInCart.length ; i++){
-      totalPrice += this.manageCart.productsInCart[i].Price *
-      this.manageCart.productsInCart[i].Quantity;
+    if ( this.manageCart.productsInCart != null ) {
+
+      // tslint:disable-next-line: prefer-for-of
+      for ( let i = 0 ; i < this.manageCart.productsInCart.length ; i++ ){
+        totalPrice += this.manageCart.productsInCart[i].Price *
+        this.manageCart.productsInCart[i].Quantity;
+      }
+      return totalPrice;
     }
-    console.log(totalPrice);
-    return totalPrice;
+    return 0;
   }
 
+  // Get products in cart call it when this page launched in ngOninit
   getProductsInCart(){
-    this.productsInCart = this.manageCart.productsInCart;
+    return this.manageCart.productsInCart;
   }
 
+  // remove any product in cart before purchasing
   removeProductFromCart(product: ProductModel){
     const index = this.manageCart.productsInCart.indexOf(product, 0);
-    if(index>-1){
-      this.manageCart.productsInCart.splice(index,1);
-      console.log(this.manageCart.productsInCart);
+    if(index > -1){
+      this.manageCart.productsInCart.splice(index, 1);
     }
+  }
+
+  // purchase a product by sending a request to backend for more details check purchase.service.ts
+  purchaseProducts(){
+    // console.log(this.manageCart.productsInCart);
+    this.purchaseModel = {
+      UserName: localStorage.getItem('username'),
+      ProductItems: this.manageCart.productsInCart
+    };
+    this.purchaseCart.puchaseProductsInCart(this.purchaseModel);
+    this.manageCart.productsInCart = [];
   }
 
   ngOnInit(): void {

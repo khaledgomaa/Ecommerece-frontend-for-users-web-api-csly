@@ -3,11 +3,13 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { LoginModel } from '../interfaces/login.interface';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({providedIn: 'root'})
 export class LoginApi {
     constructor(private httpService: HttpClient,
-                private router: Router) { }
+                private router: Router ,
+                private toastr: ToastrService) { }
 
     loginModel: LoginModel;
 
@@ -33,6 +35,8 @@ export class LoginApi {
             this.userName.next(localStorage.getItem('username'));
           },
           (err: HttpErrorResponse) => {
+            if(err.status === 401){this.toastr.error('Invalid username or password'); }
+            else if(err.status === 500){this.toastr.warning('server in maintenace try in 1 hour =D'); }
           });;
     }
 

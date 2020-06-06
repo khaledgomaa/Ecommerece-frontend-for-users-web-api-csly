@@ -8,7 +8,7 @@
             </div>
             <div class="card-body">
                     <!-- PRODUCT -->
-                    <div class="row" *ngFor="let product of productsInCart">
+                    <div class="row" *ngFor="let product of manageCart.productsInCart">
                         
                         <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
                             <h4 class="product-name"><strong>{{product.ProductName}}</strong></h4>
@@ -42,7 +42,7 @@
             </div>
             <div class="card-footer">
                 <div class="pull-right" style="margin: 10px">
-                    <a href="" class="btn btn-success pull-right">Checkout</a>
+                    <a class="btn btn-success pull-right" (click)="purchaseProducts()">Checkout</a>
                     <div class="pull-right" style="margin: 5px">
                         Total price: <b>{{getTotalPrice()}} $</b>
                     </div>

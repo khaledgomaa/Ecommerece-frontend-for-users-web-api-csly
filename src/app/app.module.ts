@@ -25,8 +25,9 @@ import { GetProductsComponent } from './get-products/get-products.component';
 import { ProductApi } from './shared/services/products.service';
 import { GetAllProductsComponent } from './get-all-products/get-all-products.component';
 import { filterList } from './shared/pips/filter.pipe';
-import { CartManager } from './shared/services/numOfCartItems.service';
+import { CartManager } from './shared/services/cartManager.service';
 import { PurchaseProductsInCartComponent } from './purchase-products-in-cart/purchase-products-in-cart.component';
+import { PurchaseProducts } from './shared/services/puchase.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,7 @@ import { PurchaseProductsInCartComponent } from './purchase-products-in-cart/pur
     NgbModule,
     BrowserAnimationsModule
   ],
-  providers: [LoginApi , AuthGuard , RegisterApi , CategoryApi , ProductApi, CartManager,
+  providers: [LoginApi , AuthGuard , RegisterApi , CategoryApi , ProductApi, CartManager, PurchaseProducts,
   {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,

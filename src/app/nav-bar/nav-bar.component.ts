@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LoginApi } from '../shared/services/login.service';
 import { CategoryApi } from '../shared/services/category.service';
-import { CartManager } from '../shared/services/numOfCartItems.service';
+import { CartManager } from '../shared/services/cartManager.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -22,7 +22,10 @@ export class NavBarComponent implements OnInit {
   userName$: Observable<string>;
 
   getNumOfItemsInCart(){
-    return this.ItemsInCart.productsInCart.length;
+    if(this.ItemsInCart.productsInCart != null){
+      return this.ItemsInCart.productsInCart.length;
+    }
+    return 0;
   }
 
   setProdcutsInCart(){
