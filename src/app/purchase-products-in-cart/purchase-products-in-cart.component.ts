@@ -3,6 +3,7 @@ import { CartManager } from '../shared/services/cartManager.service';
 import { ProductModel } from '../shared/interfaces/product.interface';
 import { PurchaseProducts } from '../shared/services/puchase.service';
 import { PurchaseProduct, ProductItem } from '../shared/interfaces/purchaseProduct.interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-purchase-products-in-cart',
@@ -12,7 +13,8 @@ import { PurchaseProduct, ProductItem } from '../shared/interfaces/purchaseProdu
 export class PurchaseProductsInCartComponent implements OnInit {
 
   constructor(public manageCart: CartManager ,
-              public purchaseCart: PurchaseProducts) { }
+              public purchaseCart: PurchaseProducts ,
+              public toastr: ToastrService) { }
 
   purchaseModel: PurchaseProduct;
 
@@ -22,10 +24,16 @@ export class PurchaseProductsInCartComponent implements OnInit {
 
   // update quantity of existing products in the cart
   addToCart(product: ProductModel , event){
-    if(this.manageCart.productsInCart.includes(product)){
-        {this.manageCart.productsInCart
-          .find(p => p.ProductName === product.ProductName).Quantity = event.target.value; }
-    }
+      console.log(event.target.value);
+      if(this.manageCart.productsInCart
+        .find(p => p.ProductName === product.ProductName).Amount >= event.target.value){
+          this.manageCart.productsInCart
+        .find(p => p.ProductName === product.ProductName).Quantity = event.target.value;
+          console.log(product);
+         }
+       else{
+         this.toastr.warning('Not enough amount for this product');
+       }
   }
 
   // get Total price of all products in the cart
@@ -64,6 +72,7 @@ export class PurchaseProductsInCartComponent implements OnInit {
       ProductItems: this.manageCart.productsInCart
     };
     this.purchaseCart.puchaseProductsInCart(this.purchaseModel);
+    console.log(this.purchaseModel);
     this.manageCart.productsInCart = [];
   }
 
